@@ -636,8 +636,7 @@ h2 {
   transition: transform 260ms ease, border-color 260ms ease, background 260ms ease;
 }
 
-.detail-card:hover,
-.wishlist-item:hover {
+.detail-card:hover {
   transform: translateY(-4px);
   border-color: rgba(245, 218, 164, 0.38);
   background: rgba(18, 11, 11, 0.34);
@@ -708,48 +707,6 @@ h2 {
   padding: 22px 0;
   border-top: 1px solid rgba(246, 229, 199, 0.24);
   border-bottom: 1px solid rgba(246, 229, 199, 0.24);
-}
-
-.wishlist-grid {
-  display: grid;
-  gap: 12px;
-  margin: 32px 0 22px;
-}
-
-.wishlist-item {
-  min-height: 168px;
-  padding: 22px;
-  border: 1px solid rgba(246, 229, 199, 0.18);
-  border-radius: 8px;
-  background: rgba(18, 11, 11, 0.2);
-  transition: transform 260ms ease, border-color 260ms ease, background 260ms ease;
-}
-
-.wishlist-item span {
-  color: var(--gold);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-}
-
-.wishlist-item h3 {
-  margin: 18px 0 0;
-  color: #f8e2bb;
-  font-family: var(--display);
-  font-size: 2rem;
-  font-weight: 500;
-  line-height: 1;
-}
-
-.wishlist-item p,
-.wishlist-note {
-  margin: 14px 0 0;
-  color: rgba(246, 229, 199, 0.82);
-}
-
-.wishlist-note {
-  padding-top: 18px;
-  border-top: 1px solid rgba(246, 229, 199, 0.2);
 }
 
 .palette {
@@ -962,6 +919,90 @@ h2 {
   background-position: center bottom;
 }
 
+.finale::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 88%, rgba(255, 164, 72, 0.22), transparent 22%),
+    radial-gradient(circle at 78% 86%, rgba(255, 186, 91, 0.2), transparent 24%),
+    linear-gradient(180deg, rgba(18, 11, 11, 0.12), rgba(18, 11, 11, 0.44));
+  mix-blend-mode: screen;
+  animation: finale-glow 2.8s ease-in-out infinite alternate;
+}
+
+.finale-candles {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.finale-light,
+.finale-flame {
+  position: absolute;
+  display: block;
+  left: 50%;
+  bottom: 7%;
+  transform: translateX(-50%);
+}
+
+.finale-light {
+  width: 220px;
+  height: 220px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 174, 76, 0.34), rgba(255, 174, 76, 0.12) 34%, transparent 68%);
+  filter: blur(10px);
+  animation: finale-light-pulse 1.9s ease-in-out infinite alternate;
+}
+
+.finale-light-left {
+  left: 21%;
+  bottom: 2%;
+}
+
+.finale-light-right {
+  left: 78%;
+  bottom: 0;
+  width: 260px;
+  height: 260px;
+  animation-delay: -0.7s;
+}
+
+.finale-flame {
+  width: 18px;
+  height: 42px;
+  border-radius: 50% 50% 44% 44%;
+  background:
+    radial-gradient(circle at 50% 68%, #fff4c7 0 14%, #ffc96b 30%, rgba(239, 105, 32, 0.78) 62%, transparent 74%);
+  filter: drop-shadow(0 0 12px rgba(255, 174, 76, 0.74));
+  transform-origin: 50% 92%;
+  animation: finale-flame 1.05s ease-in-out infinite alternate;
+}
+
+.finale-flame-left {
+  left: 16%;
+  bottom: 12%;
+}
+
+.finale-flame-center {
+  left: 76%;
+  bottom: 11%;
+  height: 52px;
+  animation-delay: -0.36s;
+}
+
+.finale-flame-right {
+  left: 86%;
+  bottom: 8%;
+  width: 14px;
+  height: 34px;
+  animation-delay: -0.72s;
+}
+
 .finale__content p {
   margin: 0;
   color: #f8e2bb;
@@ -1167,6 +1208,47 @@ h2 {
   }
 }
 
+@keyframes finale-glow {
+  0% {
+    opacity: 0.46;
+    filter: brightness(0.94);
+  }
+  48% {
+    opacity: 0.72;
+    filter: brightness(1.08);
+  }
+  100% {
+    opacity: 0.58;
+    filter: brightness(1.16);
+  }
+}
+
+@keyframes finale-light-pulse {
+  from {
+    opacity: 0.34;
+    transform: translateX(-50%) scale(0.9);
+  }
+  to {
+    opacity: 0.64;
+    transform: translateX(-50%) scale(1.12);
+  }
+}
+
+@keyframes finale-flame {
+  0% {
+    opacity: 0.78;
+    transform: translateX(-50%) scaleX(0.86) scaleY(1.02) rotate(-2deg);
+  }
+  45% {
+    opacity: 1;
+    transform: translateX(-48%) scaleX(1.06) scaleY(1.18) rotate(3deg);
+  }
+  100% {
+    opacity: 0.88;
+    transform: translateX(-52%) scaleX(0.92) scaleY(0.96) rotate(1deg);
+  }
+}
+
 @media (min-width: 680px) {
   .section-inner {
     width: min(100% - 72px, 1080px);
@@ -1178,10 +1260,6 @@ h2 {
   }
 
   .detail-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .wishlist-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
