@@ -5,20 +5,32 @@ const submittedAtInput = document.querySelector("[data-submitted-at]");
 const googleScriptUrl = "PASTE_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
 const hero = document.querySelector(".hero");
 const atmosphereCanvas = document.querySelector("[data-atmosphere]");
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 
-const observer = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      }
-    });
-  },
-  { threshold: 0.18 }
-);
+document.documentElement.classList.toggle("is-touch-device", isTouchDevice);
+document.documentElement.classList.toggle("prefers-reduced-motion", prefersReducedMotion);
 
-revealItems.forEach((item) => observer.observe(item));
+if ("IntersectionObserver" in window) {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      rootMargin: "0px 0px -8% 0px",
+      threshold: isTouchDevice ? 0.06 : 0.18,
+    }
+  );
+
+  revealItems.forEach((item) => observer.observe(item));
+} else {
+  revealItems.forEach((item) => item.classList.add("is-visible"));
+}
 
 function moveLivingScene(clientX, clientY) {
   if (!hero) return;
@@ -31,38 +43,44 @@ function moveLivingScene(clientX, clientY) {
   hero.style.setProperty("--scene-y", `${y.toFixed(2)}px`);
 }
 
-hero?.addEventListener("pointermove", (event) => {
-  moveLivingScene(event.clientX, event.clientY);
-});
+if (!isTouchDevice && !prefersReducedMotion) {
+  hero?.addEventListener("pointermove", (event) => {
+    moveLivingScene(event.clientX, event.clientY);
+  });
 
-hero?.addEventListener("pointerleave", () => {
-  hero.style.setProperty("--scene-x", "0px");
-  hero.style.setProperty("--scene-y", "0px");
-});
+  hero?.addEventListener("pointerleave", () => {
+    hero.style.setProperty("--scene-x", "0px");
+    hero.style.setProperty("--scene-y", "0px");
+  });
+}
 
-window.addEventListener("deviceorientation", (event) => {
-  if (!hero || event.gamma === null || event.beta === null) return;
+if (!isTouchDevice && !prefersReducedMotion) {
+  window.addEventListener("deviceorientation", (event) => {
+    if (!hero || event.gamma === null || event.beta === null) return;
 
-  const x = Math.max(-8, Math.min(8, event.gamma * 0.45));
-  const y = Math.max(-6, Math.min(6, (event.beta - 45) * 0.18));
+    const x = Math.max(-8, Math.min(8, event.gamma * 0.45));
+    const y = Math.max(-6, Math.min(6, (event.beta - 45) * 0.18));
 
-  hero.style.setProperty("--scene-x", `${x.toFixed(2)}px`);
-  hero.style.setProperty("--scene-y", `${y.toFixed(2)}px`);
-});
+    hero.style.setProperty("--scene-x", `${x.toFixed(2)}px`);
+    hero.style.setProperty("--scene-y", `${y.toFixed(2)}px`);
+  });
+}
 
 function initAtmosphere() {
-  if (!atmosphereCanvas || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  if (!atmosphereCanvas || prefersReducedMotion) {
     return;
   }
 
   const context = atmosphereCanvas.getContext("2d");
+  if (!context) return;
+
   const particles = [];
   let width = 0;
   let height = 0;
   let animationFrame = 0;
 
   function resize() {
-    const ratio = Math.min(window.devicePixelRatio || 1, 2);
+    const ratio = Math.min(window.devicePixelRatio || 1, isTouchDevice ? 1.5 : 2);
     const rect = atmosphereCanvas.getBoundingClientRect();
     width = Math.max(1, Math.floor(rect.width));
     height = Math.max(1, Math.floor(rect.height));
@@ -71,16 +89,20 @@ function initAtmosphere() {
     context.setTransform(ratio, 0, 0, ratio, 0, 0);
 
     particles.length = 0;
-    const count = Math.round(Math.min(90, Math.max(34, width / 10)));
+    const count = Math.round(
+      isTouchDevice
+        ? Math.min(42, Math.max(18, width / 18))
+        : Math.min(90, Math.max(34, width / 10))
+    );
 
     for (let index = 0; index < count; index += 1) {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        radius: Math.random() * 1.8 + 0.4,
-        speed: Math.random() * 0.22 + 0.05,
+        radius: Math.random() * (isTouchDevice ? 1.2 : 1.8) + 0.4,
+        speed: Math.random() * (isTouchDevice ? 0.14 : 0.22) + 0.04,
         drift: Math.random() * 0.18 - 0.09,
-        alpha: Math.random() * 0.34 + 0.08,
+        alpha: Math.random() * (isTouchDevice ? 0.22 : 0.34) + 0.08,
         phase: Math.random() * Math.PI * 2,
       });
     }

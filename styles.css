@@ -80,7 +80,7 @@ section {
   background:
     linear-gradient(180deg, rgba(12, 6, 5, 0.18), rgba(12, 6, 5, 0.74)),
     radial-gradient(circle at 50% 44%, rgba(189, 145, 71, 0.1), transparent 38%),
-    url("assets/hero-reference-clean.png") center / cover;
+    url("./assets/hero-reference-clean.png") center / cover;
 }
 
 .hero::before,
@@ -1282,20 +1282,69 @@ h2 {
     scroll-behavior: auto;
   }
 
-  *,
-  *::before,
-  *::after {
-    animation-duration: 1ms !important;
-    scroll-behavior: auto !important;
-    transition-duration: 1ms !important;
+  body::before {
+    animation: none;
+    opacity: 0;
   }
 
   .atmosphere-canvas {
     display: none;
   }
+
+  .living-scene,
+  .scene-glow,
+  .scene-veil,
+  .scene-fabric,
+  .scene-grain,
+  .ambient,
+  .finale::after,
+  .finale-light,
+  .finale-flame {
+    animation-duration: 8s !important;
+    animation-iteration-count: infinite;
+  }
+
+  .hero__content > * {
+    animation-duration: 520ms;
+  }
+
+  .reveal {
+    transition: opacity 520ms ease, transform 520ms ease;
+  }
 }
 
 @media (max-width: 679px) {
+  .atmosphere-canvas {
+    opacity: 0.34;
+  }
+
+  .living-scene {
+    transition: none;
+    transform: none;
+  }
+
+  .scene-glow {
+    opacity: 0.52;
+    animation-duration: 4.8s;
+  }
+
+  .scene-veil,
+  .scene-fabric {
+    opacity: 0.2;
+    animation-duration: 10s;
+  }
+
+  .reveal {
+    transform: translateY(22px);
+    transition: opacity 620ms ease, transform 620ms ease;
+  }
+
+  .mood-tile,
+  .detail-card,
+  .palette span {
+    transition: transform 220ms ease, opacity 220ms ease;
+  }
+
   .lantern-group-right {
     right: -2%;
   }
