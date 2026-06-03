@@ -592,11 +592,17 @@ h2 {
 }
 
 .letter p,
+.concept p,
+.symbols p,
 .transfer p,
 .dress p,
 .rsvp p {
   margin: 22px 0 0;
   font-size: 1rem;
+}
+
+.section-lead {
+  max-width: 720px;
 }
 
 .section-wine {
@@ -624,6 +630,62 @@ h2 {
   display: grid;
   gap: 12px;
   margin: 32px 0;
+}
+
+.concept-grid {
+  display: grid;
+  gap: 18px;
+  margin-top: 32px;
+}
+
+.concept-grid p {
+  max-width: 720px;
+  margin: 0;
+  color: rgba(246, 229, 199, 0.84);
+  font-size: clamp(1rem, 2.4vw, 1.22rem);
+}
+
+.concept-line {
+  padding-top: 22px;
+  border-top: 1px solid rgba(246, 229, 199, 0.22);
+  color: #f8e2bb !important;
+  font-family: var(--display);
+  font-size: clamp(2rem, 7vw, 4rem) !important;
+  line-height: 1;
+}
+
+.symbol-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.symbol-card {
+  min-height: 132px;
+  padding: 22px;
+  border: 1px solid rgba(79, 18, 28, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 247, 231, 0.34);
+  transition: transform 260ms ease, background 260ms ease, border-color 260ms ease;
+}
+
+.symbol-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(79, 18, 28, 0.24);
+  background: rgba(255, 247, 231, 0.54);
+}
+
+.symbol-card span {
+  display: block;
+  color: var(--wine);
+  font-family: var(--display);
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.symbol-card p {
+  margin-top: 14px;
+  color: rgba(39, 20, 15, 0.72);
 }
 
 .detail-card {
@@ -1013,6 +1075,17 @@ h2 {
   text-wrap: balance;
 }
 
+.finale__content small {
+  display: block;
+  max-width: 520px;
+  margin: 28px auto 0;
+  color: rgba(248, 226, 187, 0.72);
+  font-size: clamp(0.9rem, 2.4vw, 1.05rem);
+  letter-spacing: 0.08em;
+  line-height: 1.7;
+  text-transform: uppercase;
+}
+
 .reveal {
   opacity: 0;
   transform: translateY(34px);
@@ -1260,6 +1333,18 @@ h2 {
   }
 
   .detail-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .concept-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .concept-line {
+    grid-column: 1 / -1;
+  }
+
+  .symbol-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
