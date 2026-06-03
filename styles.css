@@ -605,6 +605,21 @@ h2 {
   max-width: 720px;
 }
 
+.dress-subtitle {
+  margin: 18px 0 0;
+  color: rgba(79, 18, 28, 0.76);
+  font-size: clamp(1rem, 2.6vw, 1.22rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dress-note {
+  max-width: 760px;
+  padding: 18px 0 0;
+  border-top: 1px solid rgba(79, 18, 28, 0.18);
+  color: rgba(39, 20, 15, 0.74);
+}
+
 .section-wine {
   background:
     radial-gradient(circle at 20% 0%, rgba(212, 154, 53, 0.18), transparent 32%),
