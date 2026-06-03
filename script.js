@@ -167,7 +167,7 @@ async function sendRsvp(event) {
 
   if (googleScriptUrl.includes("PASTE_GOOGLE_APPS_SCRIPT")) {
     setFormStatus(
-      "Форма готова. Осталось вставить URL Google Apps Script в script.js.",
+      "Спасибо. Сейчас форма работает в тестовом режиме, поэтому, пожалуйста, продублируйте ответ в WhatsApp.",
       "error"
     );
     return;
