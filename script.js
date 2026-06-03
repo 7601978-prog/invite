@@ -4,6 +4,7 @@ const statusNode = document.querySelector("[data-form-status]");
 const submittedAtInput = document.querySelector("[data-submitted-at]");
 const googleScriptUrl = "PASTE_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
 const hero = document.querySelector(".hero");
+const heroVideo = document.querySelector("[data-hero-video]");
 const atmosphereCanvas = document.querySelector("[data-atmosphere]");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
@@ -11,7 +12,39 @@ const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 document.documentElement.classList.toggle("is-touch-device", isTouchDevice);
 document.documentElement.classList.toggle("prefers-reduced-motion", prefersReducedMotion);
 
-if ("IntersectionObserver" in window) {
+function prepareRevealStagger() {
+  const animatedChildren = document.querySelectorAll(
+    [
+      "section:not(.hero) .section-inner > .eyebrow",
+      "section:not(.hero) .section-inner > h2",
+      "section:not(.hero) .section-inner > p",
+      "section:not(.hero) .concept-grid > *",
+      "section:not(.hero) .detail-card",
+      "section:not(.hero) .time-mark",
+      "section:not(.hero) .button",
+      "section:not(.hero) .palette > *",
+      "section:not(.hero) .mood-tile",
+      "section:not(.hero) .feelings-grid > *",
+      "section:not(.hero) .rsvp-form > label",
+      "section:not(.hero) .rsvp-form > fieldset",
+      "section:not(.hero) .rsvp-form > .form-row",
+      "section:not(.hero) .rsvp-form > button",
+      "section:not(.hero) .form-status",
+      ".finale__content > *",
+    ].join(", ")
+  );
+
+  animatedChildren.forEach((item, index) => {
+    item.classList.add("reveal-item");
+    item.style.setProperty("--reveal-delay", `${Math.min(index * 42, 420)}ms`);
+  });
+}
+
+prepareRevealStagger();
+
+if (prefersReducedMotion) {
+  revealItems.forEach((item) => item.classList.add("is-visible"));
+} else if ("IntersectionObserver" in window) {
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -30,6 +63,33 @@ if ("IntersectionObserver" in window) {
   revealItems.forEach((item) => observer.observe(item));
 } else {
   revealItems.forEach((item) => item.classList.add("is-visible"));
+}
+
+async function initHeroVideo() {
+  if (!hero || !heroVideo || prefersReducedMotion) return;
+
+  const sources = [
+    { src: "./assets/hero-bg.webm", type: "video/webm" },
+    { src: "./assets/hero-bg.mp4", type: "video/mp4" },
+  ];
+
+  for (const source of sources) {
+    try {
+      const response = await fetch(source.src, { method: "HEAD" });
+      if (!response.ok) continue;
+
+      const node = document.createElement("source");
+      node.src = source.src;
+      node.type = source.type;
+      heroVideo.append(node);
+      heroVideo.load();
+      await heroVideo.play().catch(() => {});
+      hero.classList.add("has-video");
+      return;
+    } catch (error) {
+      // Optional background video: the image-based hero stays active if no file exists.
+    }
+  }
 }
 
 function moveLivingScene(clientX, clientY) {
@@ -151,6 +211,7 @@ function initAtmosphere() {
   window.addEventListener("pagehide", () => cancelAnimationFrame(animationFrame), { once: true });
 }
 
+initHeroVideo();
 initAtmosphere();
 
 function setFormStatus(message, type = "") {

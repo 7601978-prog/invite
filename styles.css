@@ -83,6 +83,10 @@ section {
     url("./assets/hero-reference-clean.png") center / cover;
 }
 
+.hero {
+  animation: hero-arrival 1400ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
 .hero::before,
 .finale::before {
   content: "";
@@ -92,6 +96,42 @@ section {
   background:
     linear-gradient(90deg, rgba(18, 11, 11, 0.62), transparent 28%, transparent 72%, rgba(18, 11, 11, 0.64)),
     radial-gradient(circle at 50% 54%, transparent 0 28%, rgba(12, 7, 7, 0.48) 68%);
+}
+
+.hero::before {
+  z-index: 1;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: -12%;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 34% 30%, rgba(255, 206, 126, 0.18), transparent 25%),
+    linear-gradient(112deg, transparent 16%, rgba(246, 207, 153, 0.09) 43%, transparent 68%);
+  mix-blend-mode: screen;
+  opacity: 0.58;
+  transform: translate3d(-2%, 0, 0);
+  animation: hero-light-sweep 9s ease-in-out infinite alternate;
+}
+
+.hero-video {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  filter: saturate(1.05) contrast(1.04) brightness(0.82);
+  transform: scale(1.02);
+  transition: opacity 1400ms ease;
+}
+
+.hero.has-video .hero-video {
+  opacity: 0.72;
 }
 
 .hero__content,
@@ -717,19 +757,26 @@ h2 {
 }
 
 .detail-card {
+  position: relative;
   min-height: 120px;
   padding: 22px;
   border: 1px solid rgba(242, 223, 191, 0.18);
   border-radius: 8px;
   background: rgba(18, 11, 11, 0.28);
   backdrop-filter: blur(10px);
-  transition: transform 260ms ease, border-color 260ms ease, background 260ms ease;
+  box-shadow: 0 16px 42px rgba(12, 7, 7, 0.08);
+  transition:
+    transform 360ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    border-color 360ms ease,
+    background 360ms ease,
+    box-shadow 360ms ease;
 }
 
 .detail-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-5px);
   border-color: rgba(245, 218, 164, 0.38);
   background: rgba(18, 11, 11, 0.34);
+  box-shadow: 0 22px 54px rgba(12, 7, 7, 0.18);
 }
 
 .detail-card span,
@@ -760,6 +807,7 @@ h2 {
 }
 
 .button {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -776,8 +824,23 @@ h2 {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   text-decoration: none;
+  overflow: hidden;
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.24);
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  transition:
+    transform 280ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 280ms ease,
+    border-color 280ms ease,
+    filter 280ms ease;
+}
+
+.button::after {
+  content: "";
+  position: absolute;
+  inset: -40% auto -40% -55%;
+  width: 42%;
+  background: linear-gradient(90deg, transparent, rgba(255, 247, 222, 0.36), transparent);
+  transform: skewX(-18deg) translateX(0);
+  transition: transform 620ms ease;
 }
 
 .button:hover,
@@ -785,6 +848,12 @@ h2 {
   transform: translateY(-2px);
   border-color: rgba(255, 241, 203, 0.92);
   box-shadow: 0 18px 42px rgba(0, 0, 0, 0.34);
+  filter: brightness(1.04);
+}
+
+.button:hover::after,
+.button:focus-visible::after {
+  transform: skewX(-18deg) translateX(410%);
 }
 
 .button-cream {
@@ -852,7 +921,10 @@ h2 {
   background: #241310;
   box-shadow: 0 18px 44px rgba(57, 34, 56, 0.18);
   transform: translateY(0) scale(1);
-  transition: transform 420ms ease, box-shadow 420ms ease, filter 420ms ease;
+  transition:
+    transform 520ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 520ms ease,
+    filter 520ms ease;
 }
 
 .mood-tile:hover {
@@ -865,6 +937,13 @@ h2 {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transform: scale(1.01);
+  transition: transform 900ms ease, filter 900ms ease;
+}
+
+.mood-tile:hover img {
+  transform: scale(1.055);
+  filter: brightness(1.04);
 }
 
 .rsvp h2 {
@@ -1101,6 +1180,40 @@ h2 {
   transform: translateY(0);
 }
 
+.reveal-item {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 760ms ease var(--reveal-delay, 0ms),
+    transform 760ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0ms);
+}
+
+.is-visible .reveal-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+section:not(.hero):not(.finale)::after {
+  content: "";
+  position: absolute;
+  top: clamp(28px, 7vw, 72px);
+  right: clamp(22px, 8vw, 92px);
+  z-index: 1;
+  width: clamp(74px, 12vw, 148px);
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(248, 226, 187, 0.46), transparent);
+  opacity: 0.38;
+  transform-origin: right center;
+  animation: section-line-drift 8s ease-in-out infinite alternate;
+}
+
+.section-paper::after,
+.section-cream::after {
+  background: linear-gradient(90deg, transparent, rgba(79, 18, 28, 0.34), transparent);
+  opacity: 0.28;
+}
+
 @keyframes glow {
   from {
     transform: translate3d(0, 0, 0) scale(0.94);
@@ -1119,6 +1232,41 @@ h2 {
   }
   100% {
     opacity: 0;
+  }
+}
+
+@keyframes hero-arrival {
+  from {
+    opacity: 0;
+    transform: scale(1.018);
+    filter: brightness(0.82);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+@keyframes hero-light-sweep {
+  from {
+    opacity: 0.34;
+    transform: translate3d(-3%, -1%, 0) scale(1);
+  }
+  to {
+    opacity: 0.66;
+    transform: translate3d(3%, 1%, 0) scale(1.04);
+  }
+}
+
+@keyframes section-line-drift {
+  from {
+    opacity: 0.22;
+    transform: translate3d(-8px, 0, 0) scaleX(0.78);
+  }
+  to {
+    opacity: 0.46;
+    transform: translate3d(10px, 0, 0) scaleX(1);
   }
 }
 
@@ -1376,6 +1524,16 @@ h2 {
     opacity: 0;
   }
 
+  .hero,
+  .hero::after,
+  section:not(.hero):not(.finale)::after {
+    animation: none;
+  }
+
+  .hero-video {
+    display: none;
+  }
+
   .atmosphere-canvas {
     display: none;
   }
@@ -1393,12 +1551,22 @@ h2 {
     animation-iteration-count: infinite;
   }
 
-  .hero__content > * {
-    animation-duration: 520ms;
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 
-  .reveal {
-    transition: opacity 520ms ease, transform 520ms ease;
+  .hero__content > * {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .reveal-item {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
 
@@ -1426,6 +1594,17 @@ h2 {
   .reveal {
     transform: translateY(22px);
     transition: opacity 620ms ease, transform 620ms ease;
+  }
+
+  .reveal-item {
+    transform: translateY(14px);
+    transition-duration: 620ms;
+  }
+
+  section:not(.hero):not(.finale)::after {
+    top: 28px;
+    right: 22px;
+    width: 78px;
   }
 
   .mood-tile,
