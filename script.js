@@ -33,6 +33,21 @@ function prepareRevealStagger() {
 
 prepareRevealStagger();
 
+function revealVisibleItems() {
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+  revealItems.forEach((item) => {
+    if (item.classList.contains("is-visible")) return;
+
+    const rect = item.getBoundingClientRect();
+    const revealOffset = isTouchDevice ? 36 : 76;
+
+    if (rect.top < viewportHeight - revealOffset && rect.bottom > revealOffset) {
+      item.classList.add("is-visible");
+    }
+  });
+}
+
 if (prefersReducedMotion) {
   revealItems.forEach((item) => item.classList.add("is-visible"));
 } else if ("IntersectionObserver" in window) {
@@ -52,6 +67,9 @@ if (prefersReducedMotion) {
   );
 
   revealItems.forEach((item) => observer.observe(item));
+  window.addEventListener("scroll", revealVisibleItems, { passive: true });
+  window.addEventListener("resize", revealVisibleItems);
+  revealVisibleItems();
 } else {
   revealItems.forEach((item) => item.classList.add("is-visible"));
 }

@@ -634,7 +634,8 @@ h2 {
 .letter p,
 .concept p,
 .transfer p,
-.dress p {
+.dress p,
+.gift-note p {
   margin: 22px 0 0;
   font-size: 1rem;
 }
@@ -753,6 +754,30 @@ h2 {
   border-top: 1px solid rgba(246, 229, 199, 0.2);
   color: rgba(246, 229, 199, 0.86);
   font-size: clamp(1rem, 2.4vw, 1.18rem);
+}
+
+.gift-note .section-inner {
+  position: relative;
+}
+
+.gift-note .section-inner::before {
+  content: "";
+  position: absolute;
+  top: 78px;
+  left: 0;
+  width: 54px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(79, 18, 28, 0.34), transparent);
+}
+
+.gift-note h2 {
+  max-width: 620px;
+}
+
+.gift-note p {
+  max-width: 690px;
+  color: rgba(39, 20, 15, 0.78);
+  font-size: clamp(1.03rem, 2.6vw, 1.2rem);
 }
 
 .detail-card {
