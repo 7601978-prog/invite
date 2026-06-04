@@ -14,6 +14,30 @@ const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 document.documentElement.classList.toggle("is-touch-device", isTouchDevice);
 document.documentElement.classList.toggle("prefers-reduced-motion", prefersReducedMotion);
 
+function setupInlineVideo(video) {
+  if (!video) return;
+
+  const playVideo = () => {
+    if (prefersReducedMotion) return;
+    video.play?.().catch(() => {});
+  };
+
+  video.muted = true;
+  video.defaultMuted = true;
+  video.playsInline = true;
+  video.setAttribute("playsinline", "");
+  video.setAttribute("webkit-playsinline", "");
+  video.addEventListener("loadeddata", playVideo, { once: true });
+  video.addEventListener("canplay", playVideo, { once: true });
+
+  ["touchstart", "pointerdown", "click"].forEach((eventName) => {
+    document.addEventListener(eventName, playVideo, { once: true, passive: true });
+    video.addEventListener(eventName, playVideo, { passive: true });
+  });
+
+  playVideo();
+}
+
 function prepareRevealStagger() {
   const animatedChildren = document.querySelectorAll(
     [
@@ -86,15 +110,11 @@ if (prefersReducedMotion) {
 }
 
 async function initHeroVideo() {
-  if (!hero || !heroVideo || prefersReducedMotion) return;
-
-  heroVideo.muted = true;
-  heroVideo.defaultMuted = true;
-  heroVideo.playsInline = true;
+  if (!hero || !heroVideo) return;
 
   if (heroVideo.querySelector("source") || heroVideo.currentSrc) {
     heroVideo.load();
-    await heroVideo.play?.().catch(() => {});
+    setupInlineVideo(heroVideo);
     hero.classList.add("has-video");
     return;
   }
@@ -114,7 +134,7 @@ async function initHeroVideo() {
       node.type = source.type;
       heroVideo.append(node);
       heroVideo.load();
-      await heroVideo.play().catch(() => {});
+      setupInlineVideo(heroVideo);
       hero.classList.add("has-video");
       return;
     } catch (error) {
@@ -132,13 +152,7 @@ function initStoryVideos() {
   };
 
   storyVideos.forEach((video) => {
-    video.muted = true;
-    video.defaultMuted = true;
-    video.playsInline = true;
-    video.addEventListener("loadeddata", () => playVideo(video), { once: true });
-    ["touchstart", "pointerdown", "click"].forEach((eventName) => {
-      video.addEventListener(eventName, () => playVideo(video), { passive: true });
-    });
+    setupInlineVideo(video);
   });
 
   if (!("IntersectionObserver" in window)) {

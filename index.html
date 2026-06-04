@@ -8,12 +8,23 @@
       content="Свадьба Ромы и Лизы: 25 июля, Mega Dacha, Almaty"
     />
     <title>Свадьба Ромы и Лизы | 25 июля</title>
-    <link rel="stylesheet" href="./styles.css?v=20260604-invitation-video-bg" />
+    <link rel="stylesheet" href="./styles.css?v=20260604-hero-video-mobile" />
   </head>
   <body>
     <main>
       <section class="hero section-dark" aria-label="Главное приглашение">
-        <video class="hero-video" data-hero-video autoplay muted loop playsinline preload="metadata" aria-hidden="true">
+        <video
+          class="hero-video"
+          data-hero-video
+          autoplay
+          muted
+          loop
+          playsinline
+          webkit-playsinline
+          preload="auto"
+          poster="./assets/hero-reference-clean.png"
+          aria-hidden="true"
+        >
           <source src="./assets/hero-bg.mp4" type="video/mp4" />
         </video>
         <canvas class="atmosphere-canvas" data-atmosphere aria-hidden="true"></canvas>
@@ -64,7 +75,8 @@
           muted
           loop
           playsinline
-          preload="metadata"
+          webkit-playsinline
+          preload="auto"
           aria-hidden="true"
         ></video>
         <div class="section-inner narrow">
@@ -299,6 +311,6 @@
       Звук
     </button>
 
-    <script src="./script.js?v=20260604-invitation-video-bg"></script>
+    <script src="./script.js?v=20260604-hero-video-mobile"></script>
   </body>
 </html>
