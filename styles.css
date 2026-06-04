@@ -599,6 +599,14 @@ h2 {
   font-size: 1rem;
 }
 
+.dress-subtitle {
+  max-width: 620px;
+  color: rgba(39, 20, 15, 0.68);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 .section-wine {
   background:
     radial-gradient(circle at 20% 0%, rgba(212, 154, 53, 0.18), transparent 32%),
