@@ -1,4 +1,4 @@
-const SPREADSHEET_ID = "1sp-nhX6OyN9KTP2DE81cQA1F3WF3wQXdNHT1SpNxFgM";
+const SPREADSHEET_ID = "1Gk-PdYB7NugNmW5gtR-CdcUxPPi6uT_ALeZqXDUMakk";
 const SHEET_NAME = "Ответы гостей";
 
 function doPost(e) {

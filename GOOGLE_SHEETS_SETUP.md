@@ -2,7 +2,7 @@
 
 Target Google Sheet:
 
-`https://docs.google.com/spreadsheets/d/1sp-nhX6OyN9KTP2DE81cQA1F3WF3wQXdNHT1SpNxFgM/edit?usp=sharing`
+`https://docs.google.com/spreadsheets/d/1Gk-PdYB7NugNmW5gtR-CdcUxPPi6uT_ALeZqXDUMakk/edit?usp=sharing`
 
 1. Open the target Google Sheet.
 2. Open `Extensions -> Apps Script`.
