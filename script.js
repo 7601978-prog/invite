@@ -3,7 +3,6 @@ const rsvpForm = document.querySelector("[data-rsvp-form]");
 const statusNode = document.querySelector("[data-form-status]");
 const submittedAtInput = document.querySelector("[data-submitted-at]");
 const googleScriptUrl = "PASTE_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
-const whatsappNumber = "79995835754";
 const hero = document.querySelector(".hero");
 const atmosphereCanvas = document.querySelector("[data-atmosphere]");
 
@@ -143,18 +142,6 @@ function isGoogleSheetsConnected() {
   return googleScriptUrl && !googleScriptUrl.includes("PASTE_GOOGLE_APPS_SCRIPT");
 }
 
-function createRsvpMessage(formData) {
-  return [
-    "RSVP: свадьба Roman & Liza",
-    `Имя: ${formData.guestName || "-"}`,
-    `Телефон: ${formData.phone || "-"}`,
-    `Присутствие: ${formData.attendance || "-"}`,
-    `Количество гостей: ${formData.guestCount || "-"}`,
-    `Трансфер: ${formData.transfer || "-"}`,
-    `Комментарий: ${formData.comment || "-"}`,
-  ].join("\n");
-}
-
 function sendToGoogleSheets(formData) {
   if (!isGoogleSheetsConnected()) {
     return Promise.resolve(false);
@@ -181,21 +168,18 @@ async function sendRsvp(event) {
   setFormStatus("Сохраняем ответ...");
 
   const formData = Object.fromEntries(new FormData(rsvpForm));
-  const message = createRsvpMessage(formData);
 
   try {
     const savedToSheet = await sendToGoogleSheets(formData);
-    window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, "_blank");
 
     if (savedToSheet) {
-      setFormStatus("Спасибо! Ответ сохранен, WhatsApp открылся с готовым сообщением.", "success");
+      setFormStatus("Спасибо! Ваш ответ сохранен.", "success");
       rsvpForm.reset();
     } else {
-      setFormStatus("WhatsApp открылся. Для записи в таблицу нужно вставить URL Google Apps Script.", "error");
+      setFormStatus("Чтобы ответы попадали в таблицу, нужно вставить URL Google Apps Script.", "error");
     }
   } catch (error) {
-    window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, "_blank");
-    setFormStatus("WhatsApp открылся. Таблица временно не приняла ответ, проверьте подключение.", "error");
+    setFormStatus("Таблица временно не приняла ответ. Проверьте подключение Google Apps Script.", "error");
   } finally {
     submitButton.disabled = false;
   }

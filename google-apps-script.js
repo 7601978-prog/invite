@@ -1,4 +1,5 @@
-const SHEET_NAME = "RSVP";
+const SPREADSHEET_ID = "1sp-nhX6OyN9KTP2DE81cQA1F3WF3wQXdNHT1SpNxFgM";
+const SHEET_NAME = "Ответы гостей";
 
 function doPost(e) {
   const sheet = getSheet();
@@ -24,12 +25,12 @@ function doPost(e) {
 
 function doGet() {
   return ContentService
-    .createTextOutput(JSON.stringify({ ok: true, service: "Roman & Liza RSVP" }))
+    .createTextOutput(JSON.stringify({ ok: true, service: "Roman & Liza RSVP", sheet: SPREADSHEET_ID }))
     .setMimeType(ContentService.MimeType.JSON);
 }
 
 function getSheet() {
-  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
   let sheet = spreadsheet.getSheetByName(SHEET_NAME);
 
   if (!sheet) {
@@ -38,16 +39,16 @@ function getSheet() {
 
   if (sheet.getLastRow() === 0) {
     sheet.appendRow([
-      "Saved at",
-      "Submitted at",
-      "Event",
-      "Guest name",
-      "Phone",
-      "Attendance",
-      "Guest count",
-      "Transfer",
-      "Comment",
-      "Source",
+      "Сохранено",
+      "Отправлено с сайта",
+      "Событие",
+      "Имя гостя",
+      "Телефон",
+      "Присутствие",
+      "Количество гостей",
+      "Трансфер",
+      "Комментарий",
+      "Источник",
     ]);
   }
 
