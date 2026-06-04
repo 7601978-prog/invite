@@ -14,7 +14,6 @@ function doPost(e) {
     data.attendance || "",
     data.guestCount || "",
     data.transfer || "",
-    data.comment || "",
     e.parameter.source || "website",
   ]);
 
@@ -47,7 +46,6 @@ function getSheet() {
       "Присутствие",
       "Количество гостей",
       "Трансфер",
-      "Комментарий",
       "Источник",
     ]);
   }
