@@ -110,14 +110,13 @@ section {
   animation: poster-line-in 900ms ease forwards;
 }
 
-.hero__guest-line { animation-delay: 260ms; }
-.hero__intro { animation-delay: 460ms; }
-.hero h1 { animation-delay: 720ms; }
-.hero__divider { animation-delay: 980ms; }
-.hero time { animation-delay: 1120ms; }
-.hero__place { animation-delay: 1280ms; }
-.hero__mood { animation-delay: 1460ms; }
-.hero__dress { animation-delay: 1620ms; }
+.hero__intro { animation-delay: 260ms; }
+.hero h1 { animation-delay: 520ms; }
+.hero__divider { animation-delay: 780ms; }
+.hero time { animation-delay: 920ms; }
+.hero__place { animation-delay: 1080ms; }
+.hero__mood { animation-delay: 1260ms; }
+.hero__dress { animation-delay: 1420ms; }
 
 .atmosphere-canvas {
   position: absolute;
@@ -490,7 +489,6 @@ h2 {
   color: var(--wine);
 }
 
-.hero__guest-line,
 .hero__intro,
 .hero__place,
 .hero__mood,
@@ -501,11 +499,6 @@ h2 {
   font-family: var(--serif);
   font-weight: 400;
   letter-spacing: 0.22em;
-}
-
-.hero__guest-line {
-  font-size: clamp(0.82rem, 2.5vw, 1.04rem);
-  text-transform: uppercase;
 }
 
 .hero__intro {
