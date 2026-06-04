@@ -25,7 +25,7 @@ function doPost(e) {
 
 function doGet() {
   return ContentService
-    .createTextOutput(JSON.stringify({ ok: true, service: "Roman & Liza RSVP", sheet: SPREADSHEET_ID }))
+    .createTextOutput(JSON.stringify({ ok: true, service: "Роман & Елизавета RSVP", sheet: SPREADSHEET_ID }))
     .setMimeType(ContentService.MimeType.JSON);
 }
 
