@@ -8,7 +8,7 @@
       content="Свадьба Ромы и Лизы: 25 июля, Mega Dacha, Almaty"
     />
     <title>Свадьба Ромы и Лизы | 25 июля</title>
-    <link rel="stylesheet" href="./styles.css?v=20260604-video-bg-mobile" />
+    <link rel="stylesheet" href="./styles.css?v=20260604-invitation-video-bg" />
   </head>
   <body>
     <main>
@@ -55,22 +55,18 @@
         <a class="scroll-cue" href="#invitation" aria-label="Перейти к приглашению"></a>
       </section>
 
-      <section class="story-video section-dark reveal" aria-label="Видео атмосферы">
-        <div class="story-video__frame">
-          <video
-            class="story-video__media"
-            src="./assets/after-hero-video.mp4"
-            data-story-video
-            autoplay
-            muted
-            loop
-            playsinline
-            preload="metadata"
-          ></video>
-        </div>
-      </section>
-
-      <section id="invitation" class="letter section-paper reveal" aria-label="Основное приглашение">
+      <section id="invitation" class="letter invitation-video section-dark reveal" aria-label="Основное приглашение">
+        <video
+          class="invitation-video__media"
+          src="./assets/after-hero-video.mp4"
+          data-story-video
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          aria-hidden="true"
+        ></video>
         <div class="section-inner narrow">
           <p class="eyebrow">Invitation</p>
           <h2>Дом - это состояние рядом друг с другом</h2>
@@ -303,6 +299,6 @@
       Звук
     </button>
 
-    <script src="./script.js?v=20260604-video-bg-mobile"></script>
+    <script src="./script.js?v=20260604-invitation-video-bg"></script>
   </body>
 </html>
