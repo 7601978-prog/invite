@@ -2,6 +2,7 @@ const revealItems = document.querySelectorAll(".reveal");
 const rsvpForm = document.querySelector("[data-rsvp-form]");
 const statusNode = document.querySelector("[data-form-status]");
 const submittedAtInput = document.querySelector("[data-submitted-at]");
+const googleScriptUrl = "PASTE_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
 const whatsappNumber = "79995835754";
 const hero = document.querySelector(".hero");
 const atmosphereCanvas = document.querySelector("[data-atmosphere]");
@@ -138,6 +139,35 @@ function setFormStatus(message, type = "") {
   statusNode.classList.toggle("is-success", type === "success");
 }
 
+function isGoogleSheetsConnected() {
+  return googleScriptUrl && !googleScriptUrl.includes("PASTE_GOOGLE_APPS_SCRIPT");
+}
+
+function createRsvpMessage(formData) {
+  return [
+    "RSVP: свадьба Roman & Liza",
+    `Имя: ${formData.guestName || "-"}`,
+    `Телефон: ${formData.phone || "-"}`,
+    `Присутствие: ${formData.attendance || "-"}`,
+    `Количество гостей: ${formData.guestCount || "-"}`,
+    `Трансфер: ${formData.transfer || "-"}`,
+    `Комментарий: ${formData.comment || "-"}`,
+  ].join("\n");
+}
+
+function sendToGoogleSheets(formData) {
+  if (!isGoogleSheetsConnected()) {
+    return Promise.resolve(false);
+  }
+
+  return fetch(`${googleScriptUrl}?source=website`, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(formData),
+  }).then(() => true);
+}
+
 async function sendRsvp(event) {
   event.preventDefault();
 
@@ -148,22 +178,27 @@ async function sendRsvp(event) {
     submittedAtInput.value = new Date().toISOString();
   }
   submitButton.disabled = true;
-  setFormStatus("Открываем WhatsApp...");
+  setFormStatus("Сохраняем ответ...");
 
   const formData = Object.fromEntries(new FormData(rsvpForm));
-  const message = [
-    "RSVP: свадьба Roman & Liza",
-    `Имя: ${formData.guestName || "-"}`,
-    `Телефон: ${formData.phone || "-"}`,
-    `Присутствие: ${formData.attendance || "-"}`,
-    `Количество гостей: ${formData.guestCount || "-"}`,
-    `Трансфер: ${formData.transfer || "-"}`,
-    `Комментарий: ${formData.comment || "-"}`,
-  ].join("\n");
+  const message = createRsvpMessage(formData);
 
-  window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, "_blank");
-  setFormStatus("Спасибо! WhatsApp открылся с готовым сообщением.");
-  submitButton.disabled = false;
+  try {
+    const savedToSheet = await sendToGoogleSheets(formData);
+    window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, "_blank");
+
+    if (savedToSheet) {
+      setFormStatus("Спасибо! Ответ сохранен, WhatsApp открылся с готовым сообщением.", "success");
+      rsvpForm.reset();
+    } else {
+      setFormStatus("WhatsApp открылся. Для записи в таблицу нужно вставить URL Google Apps Script.", "error");
+    }
+  } catch (error) {
+    window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, "_blank");
+    setFormStatus("WhatsApp открылся. Таблица временно не приняла ответ, проверьте подключение.", "error");
+  } finally {
+    submitButton.disabled = false;
+  }
 }
 
 rsvpForm?.addEventListener("submit", sendRsvp);

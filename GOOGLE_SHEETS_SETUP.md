@@ -17,6 +17,11 @@ const googleScriptUrl = "PASTE_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
 
 with your Web app URL.
 
+After that, each RSVP submit will:
+
+- append the guest response to the `RSVP` sheet;
+- open WhatsApp with the same response already prepared for sending.
+
 The RSVP table will be created automatically with these columns:
 
 `Saved at`, `Submitted at`, `Event`, `Guest name`, `Phone`, `Attendance`, `Guest count`, `Transfer`, `Comment`, `Source`.
