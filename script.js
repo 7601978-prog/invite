@@ -2,7 +2,7 @@ const revealItems = document.querySelectorAll(".reveal");
 const rsvpForm = document.querySelector("[data-rsvp-form]");
 const statusNode = document.querySelector("[data-form-status]");
 const submittedAtInput = document.querySelector("[data-submitted-at]");
-const googleScriptUrl = "PASTE_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+const rsvpWhatsappUrl = "https://wa.me/79995835754";
 const hero = document.querySelector(".hero");
 const heroVideo = document.querySelector("[data-hero-video]");
 const storyVideos = document.querySelectorAll("[data-story-video]");
@@ -348,40 +348,28 @@ async function sendRsvp(event) {
 
   if (!rsvpForm) return;
 
-  if (googleScriptUrl.includes("PASTE_GOOGLE_APPS_SCRIPT")) {
-    setFormStatus(
-      "Спасибо. Сейчас форма работает в тестовом режиме, поэтому, пожалуйста, продублируйте ответ в WhatsApp.",
-      "error"
-    );
-    return;
-  }
-
   const submitButton = rsvpForm.querySelector("button[type='submit']");
   submittedAtInput.value = new Date().toISOString();
   submitButton.disabled = true;
-  setFormStatus("Отправляем ответ...");
 
-  try {
-    await fetch(googleScriptUrl, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(Object.fromEntries(new FormData(rsvpForm))),
-    });
+  const formData = new FormData(rsvpForm);
+  const message = [
+    "RSVP на свадьбу Ромы и Лизы",
+    "",
+    `Имя: ${formData.get("guestName") || "-"}`,
+    `Телефон: ${formData.get("phone") || "-"}`,
+    `Присутствие: ${formData.get("attendance") || "-"}`,
+    `Количество гостей: ${formData.get("guestCount") || "-"}`,
+    `Нужен трансфер: ${formData.get("transfer") || "-"}`,
+  ].join("\n");
 
-    rsvpForm.reset();
-    setFormStatus(
-      "Спасибо, ваш ответ сохранен. Будем ждать встречи под теплым светом фонарей.",
-      "success"
-    );
-  } catch (error) {
-    setFormStatus(
-      "Не получилось отправить ответ. Попробуйте еще раз или напишите нам в WhatsApp.",
-      "error"
-    );
-  } finally {
-    submitButton.disabled = false;
+  const url = `${rsvpWhatsappUrl}?text=${encodeURIComponent(message)}`;
+  setFormStatus("Открываем WhatsApp для отправки ответа...", "success");
+  const whatsappWindow = window.open(url, "_blank", "noopener,noreferrer");
+  if (!whatsappWindow) {
+    window.location.href = url;
   }
+  submitButton.disabled = false;
 }
 
 rsvpForm?.addEventListener("submit", sendRsvp);
