@@ -565,7 +565,8 @@ h1 {
   margin-top: 52px;
   font-size: clamp(3.15rem, 12vw, 6.6rem);
   line-height: 0.92;
-  letter-spacing: 0.17em;
+  letter-spacing: clamp(0.04em, 1.25vw, 0.17em);
+  text-align: center;
   text-transform: uppercase;
   text-wrap: balance;
 }
@@ -573,6 +574,15 @@ h1 {
 h1 span,
 h1 em {
   display: block;
+  width: 100%;
+  max-width: 100%;
+  text-align: center;
+}
+
+.hero__name-long {
+  font-size: clamp(2.55rem, 10.6vw, 6.2rem);
+  letter-spacing: clamp(0.015em, 0.72vw, 0.13em);
+  line-height: 0.96;
 }
 
 h1 em {
@@ -1334,12 +1344,10 @@ section:not(.hero):not(.finale)::after {
 @keyframes hero-arrival {
   from {
     opacity: 0;
-    transform: scale(1.018);
     filter: brightness(0.82);
   }
   to {
     opacity: 1;
-    transform: scale(1);
     filter: brightness(1);
   }
 }
