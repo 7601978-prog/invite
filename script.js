@@ -6,6 +6,7 @@ const googleScriptUrl = "PASTE_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
 const hero = document.querySelector(".hero");
 const heroVideo = document.querySelector("[data-hero-video]");
 const storyVideos = document.querySelectorAll("[data-story-video]");
+const soundToggle = document.querySelector("[data-sound-toggle]");
 const atmosphereCanvas = document.querySelector("[data-atmosphere]");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
@@ -87,6 +88,17 @@ if (prefersReducedMotion) {
 async function initHeroVideo() {
   if (!hero || !heroVideo || prefersReducedMotion) return;
 
+  heroVideo.muted = true;
+  heroVideo.defaultMuted = true;
+  heroVideo.playsInline = true;
+
+  if (heroVideo.querySelector("source") || heroVideo.currentSrc) {
+    heroVideo.load();
+    await heroVideo.play?.().catch(() => {});
+    hero.classList.add("has-video");
+    return;
+  }
+
   const sources = [
     { src: "./assets/hero-bg.webm", type: "video/webm" },
     { src: "./assets/hero-bg.mp4", type: "video/mp4" },
@@ -121,8 +133,12 @@ function initStoryVideos() {
 
   storyVideos.forEach((video) => {
     video.muted = true;
+    video.defaultMuted = true;
     video.playsInline = true;
     video.addEventListener("loadeddata", () => playVideo(video), { once: true });
+    ["touchstart", "pointerdown", "click"].forEach((eventName) => {
+      video.addEventListener(eventName, () => playVideo(video), { passive: true });
+    });
   });
 
   if (!("IntersectionObserver" in window)) {
@@ -146,6 +162,40 @@ function initStoryVideos() {
   );
 
   storyVideos.forEach((video) => videoObserver.observe(video));
+}
+
+function initSoundToggle() {
+  if (!soundToggle) return;
+
+  const videos = () => [
+    ...document.querySelectorAll(".hero-video, [data-story-video]"),
+  ].filter((video) => video instanceof HTMLVideoElement);
+
+  const setSound = (enabled) => {
+    videos().forEach((video) => {
+      video.muted = !enabled;
+      video.volume = enabled ? 1 : 0;
+      video.play?.().catch(() => {});
+    });
+
+    soundToggle.setAttribute("aria-pressed", String(enabled));
+    soundToggle.textContent = enabled ? "Звук вкл" : "Звук";
+  };
+
+  soundToggle.addEventListener("click", () => {
+    const enabled = soundToggle.getAttribute("aria-pressed") !== "true";
+    setSound(enabled);
+  });
+
+  document.addEventListener(
+    "visibilitychange",
+    () => {
+      if (!document.hidden) {
+        videos().forEach((video) => video.play?.().catch(() => {}));
+      }
+    },
+    { passive: true }
+  );
 }
 
 function moveLivingScene(clientX, clientY) {
@@ -269,6 +319,7 @@ function initAtmosphere() {
 
 initHeroVideo();
 initStoryVideos();
+initSoundToggle();
 initAtmosphere();
 
 function setFormStatus(message, type = "") {
