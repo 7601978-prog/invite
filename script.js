@@ -5,6 +5,7 @@ const submittedAtInput = document.querySelector("[data-submitted-at]");
 const googleScriptUrl = "PASTE_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
 const hero = document.querySelector(".hero");
 const heroVideo = document.querySelector("[data-hero-video]");
+const storyVideos = document.querySelectorAll("[data-story-video]");
 const atmosphereCanvas = document.querySelector("[data-atmosphere]");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
@@ -108,6 +109,43 @@ async function initHeroVideo() {
       // Optional background video: the image-based hero stays active if no file exists.
     }
   }
+}
+
+function initStoryVideos() {
+  if (!storyVideos.length) return;
+
+  const playVideo = (video) => {
+    if (prefersReducedMotion) return;
+    video.play?.().catch(() => {});
+  };
+
+  storyVideos.forEach((video) => {
+    video.muted = true;
+    video.playsInline = true;
+    video.addEventListener("loadeddata", () => playVideo(video), { once: true });
+  });
+
+  if (!("IntersectionObserver" in window)) {
+    storyVideos.forEach(playVideo);
+    return;
+  }
+
+  const videoObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target;
+
+        if (entry.isIntersecting) {
+          playVideo(video);
+        } else {
+          video.pause?.();
+        }
+      });
+    },
+    { threshold: 0.24 }
+  );
+
+  storyVideos.forEach((video) => videoObserver.observe(video));
 }
 
 function moveLivingScene(clientX, clientY) {
@@ -230,6 +268,7 @@ function initAtmosphere() {
 }
 
 initHeroVideo();
+initStoryVideos();
 initAtmosphere();
 
 function setFormStatus(message, type = "") {
