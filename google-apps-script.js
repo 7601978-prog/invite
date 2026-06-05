@@ -1,5 +1,5 @@
-const SPREADSHEET_ID = "1Gk-PdYB7NugNmW5gtR-CdcUxPPi6uT_ALeZqXDUMakk";
-const SHEET_NAME = "Ответы гостей";
+const SPREADSHEET_ID = "1ie0dF4v1zQSQuja8fZHkz1RSEBZwKfESNNx8t-bMWbA";
+const SHEET_NAME = "Приглашенные";
 
 function doPost(e) {
   const sheet = getSheet();

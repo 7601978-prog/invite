@@ -2,7 +2,7 @@
 
 Target Google Sheet:
 
-`https://docs.google.com/spreadsheets/d/1Gk-PdYB7NugNmW5gtR-CdcUxPPi6uT_ALeZqXDUMakk/edit?usp=sharing`
+`https://docs.google.com/spreadsheets/d/1ie0dF4v1zQSQuja8fZHkz1RSEBZwKfESNNx8t-bMWbA/edit?gid=0#gid=0`
 
 1. Open the target Google Sheet.
 2. Open `Extensions -> Apps Script`.
@@ -21,7 +21,7 @@ const googleScriptUrl = "PASTE_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
 
 with your Web app URL.
 
-After that, each RSVP submit will append the guest response to the `Ответы гостей` sheet.
+After that, each RSVP submit will append the guest response to the `Приглашенные` sheet.
 
 The RSVP table will be created automatically with these columns:
 
