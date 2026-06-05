@@ -2,7 +2,7 @@ const revealItems = document.querySelectorAll(".reveal");
 const rsvpForm = document.querySelector("[data-rsvp-form]");
 const statusNode = document.querySelector("[data-form-status]");
 const submittedAtInput = document.querySelector("[data-submitted-at]");
-const googleScriptUrl = "PASTE_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzHPkBfOfCNJPi8fyjLHKly5oN69pvIIw4ZKQd1VJrlO_RSm3tlKuvfQxBJPnHEIa5m5A/exec";
 const hero = document.querySelector(".hero");
 const atmosphereCanvas = document.querySelector("[data-atmosphere]");
 
