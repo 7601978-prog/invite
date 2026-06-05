@@ -3,7 +3,9 @@ const SHEET_NAME = "Приглашенные";
 
 function doPost(e) {
   const sheet = getSheet();
-  const data = JSON.parse(e.postData.contents || "{}");
+  const payload = e && e.postData ? e.postData.contents : "{}";
+  const data = JSON.parse(payload || "{}");
+  const source = e && e.parameter ? e.parameter.source : "manual-test";
 
   sheet.appendRow([
     new Date(),
@@ -14,12 +16,29 @@ function doPost(e) {
     data.attendance || "",
     data.guestCount || "",
     data.transfer || "",
-    e.parameter.source || "website",
+    source || "website",
   ]);
 
   return ContentService
     .createTextOutput(JSON.stringify({ ok: true }))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+function testDoPost() {
+  return doPost({
+    parameter: { source: "manual-test" },
+    postData: {
+      contents: JSON.stringify({
+        submittedAt: new Date().toISOString(),
+        event: "Тест подключения",
+        guestName: "Тест Google Script",
+        phone: "+7 000 000 00 00",
+        attendance: "Да, буду",
+        guestCount: "1",
+        transfer: "Нет",
+      }),
+    },
+  });
 }
 
 function doGet() {
